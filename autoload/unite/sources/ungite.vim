@@ -8,14 +8,14 @@ let s:source = {
       \ }
 
 let s:statuses = {
-      \ ' ': '           ',
-      \ '?': 'untracked  ',
-      \ '!': 'ignored    ',
-      \ 'M': 'modified   ',
-      \ 'A': 'added      ',
-      \ 'D': 'deleted    ',
-      \ 'R': 'renamed    ',
-      \ 'C': 'copied     '
+      \ ' ': '',
+      \ '?': 'untracked',
+      \ '!': 'ignored',
+      \ 'M': 'modified',
+      \ 'A': 'added',
+      \ 'D': 'deleted',
+      \ 'R': 'renamed',
+      \ 'C': 'copied'
       \ }
 
 function! unite#sources#ungite#define()
@@ -37,7 +37,7 @@ function! s:format(line)
 
   let filename = split(a:line)[1]
   return {
-        \ 'word': s:statuses[index_status] . s:statuses[work_status] . filename,
+        \ 'word': printf('%-9s %-9s  %s', s:statuses[index_status], s:statuses[work_status], filename),
         \ 'source': s:source.name,
         \ 'kind': ['ungite'],
         \ 'fully_staged': fully_staged,
@@ -47,12 +47,18 @@ function! s:format(line)
 endfunction
 
 function! s:source.hooks.on_syntax(args, context)
-  syntax match uniteSource__ungite_Index /\S\+ /
+  syntax match uniteSource__ungite_Path /.*/
         \ contained containedin=uniteSource_ungite
+  syntax match uniteSource__ungite_Work /.\{9\}/
+        \ contained containedin=uniteSource_ungite
+        \ nextgroup=uniteSource__ungite_Path
+        \ skipwhite
+  highlight default link uniteSource__ungite_Work diffRemoved
+  syntax match uniteSource__ungite_Index /.\{9\}/
+        \ contained containedin=uniteSource_ungite
+        \ nextgroup=uniteSource__ungite_Work
+        \ skipwhite
   highlight default link uniteSource__ungite_Index diffAdded
-  syntax match uniteSource__ungite_Work /\S\+  /
-        \ contained containedin=uniteSource_ungite
-  highlight default link uniteSource__ungite_Index diffRemoved
 endfunction
 
 function! s:git(cmd)
