@@ -6,7 +6,7 @@ let s:kind = {
       \ 'default_action': 'toggle_staging',
       \ 'action_table': {},
       \ 'alias_table': {},
-      \ 'parents': []
+      \ 'parents': ['file']
       \ }
 
 function! unite#kinds#ungite#define()
@@ -22,7 +22,7 @@ function! s:action(description)
         \ }
 endfunction
 
-let s:kind.action_table.toggle_staging = s:action('Toggle the staging of the file')
+let s:kind.action_table.toggle_staging = s:action('Toggle staging of file')
 function! s:kind.action_table.toggle_staging.func(candidates)
   call s:toggle(a:candidates)
 endfunction
@@ -37,13 +37,13 @@ function! s:toggle(candidates)
 endfunction
 
 
-let s:kind.action_table.stage = s:action('Stage file')
-function! s:kind.action_table.stage.func(candidates)
+let s:kind.action_table.add = s:action('Add file to staging')
+function! s:kind.action_table.add.func(candidates)
   call s:git('add', a:candidates)
 endfunction
 
-let s:kind.action_table.unstage = s:action('Unstage file')
-function! s:kind.action_table.unstage.func(candidates)
+let s:kind.action_table.reset = s:action('Reset file from staging')
+function! s:kind.action_table.reset.func(candidates)
   call s:git('reset', a:candidates)
 endfunction
 

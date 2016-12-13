@@ -24,6 +24,7 @@ endfunction
 
 function! s:source.gather_candidates(args, context)
   let status = s:git('status --porcelain')
+  call sort(status)
   return map(status, 's:format(v:val)')
 endfunction
 
@@ -47,18 +48,10 @@ function! s:format(line)
 endfunction
 
 function! s:source.hooks.on_syntax(args, context)
-  syntax match uniteSource__ungite_Path /.*/
-        \ contained containedin=uniteSource_ungite
-  syntax match uniteSource__ungite_Work /.\{9\}/
-        \ contained containedin=uniteSource_ungite
-        \ nextgroup=uniteSource__ungite_Path
-        \ skipwhite
-  highlight default link uniteSource__ungite_Work diffRemoved
-  syntax match uniteSource__ungite_Index /.\{9\}/
-        \ contained containedin=uniteSource_ungite
-        \ nextgroup=uniteSource__ungite_Work
-        \ skipwhite
+  syntax region uniteSource__ungite_Index start='\%1c' end='\%10c'
+  syntax region uniteSource__ungite_Work start='\%11c' end='\%21c'
   highlight default link uniteSource__ungite_Index diffAdded
+  highlight default link uniteSource__ungite_Work diffRemoved
 endfunction
 
 function! s:git(cmd)
