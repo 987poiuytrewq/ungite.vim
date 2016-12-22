@@ -45,8 +45,7 @@ function! s:format(line)
         \ 'source': s:source.name,
         \ 'kind': ['ungite_status'],
         \ 'fully_staged': fully_staged,
-        \ 'action__path': action_path,
-        \ 'action__directory': ''
+        \ 'action__path': action_path
         \ }
 endfunction
 
