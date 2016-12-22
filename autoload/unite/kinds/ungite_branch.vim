@@ -28,7 +28,7 @@ function! s:kind.action_table.git_branch_checkout.func(candidates)
 endfunction
 
 function! s:git(cmd, candidates)
-  let paths = map(copy(a:candidates), 'v:val.action__path')
+  let paths = map(copy(a:candidates), 'v:val.branch')
   call system('git ' . a:cmd . ' ' . join(paths, ' '))
 endfunction
 

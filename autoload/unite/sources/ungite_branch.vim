@@ -21,12 +21,12 @@ endfunction
 function! s:format(line)
   let branch = split(strpart(a:line, 2))[0]
   return {
-        \ 'word': substitute(a:line, '^*', s:current_indicator),
+        \ 'word': substitute(a:line, '^*', s:current_indicator, ''),
         \ 'source': s:source.name,
         \ 'kind': ['ungite_branch'],
         \ 'branch': branch
         \ }
-end
+endfunction
 
 function! s:git(cmd)
   return systemlist('git ' . a:cmd)
