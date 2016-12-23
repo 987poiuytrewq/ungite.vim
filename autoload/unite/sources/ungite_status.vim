@@ -23,7 +23,7 @@ function! unite#sources#ungite_status#define()
 endfunction
 
 function! s:source.gather_candidates(args, context)
-  let status = s:git('status --ignored --porcelain')
+  let status = s:git('status --porcelain')
   call sort(status)
   return map(status, 's:format(v:val)')
 endfunction
@@ -38,14 +38,14 @@ function! s:format(line)
 
   " get the last element because of a -> b syntax for renames
   let parts = split(a:line)
-  let action_path = parts[-1]
+  let action__path = parts[-1]
   let file = join(parts[1:-1], ' ')
   return {
         \ 'word': printf('%-9s %-9s  %s', s:statuses[index_status], s:statuses[work_status], file),
         \ 'source': s:source.name,
         \ 'kind': ['ungite_status'],
         \ 'fully_staged': fully_staged,
-        \ 'action__path': action_path
+        \ 'action__path': action__path
         \ }
 endfunction
 
@@ -57,6 +57,7 @@ function! s:source.hooks.on_syntax(args, context)
   syntax match uniteSource__ungite_status_Untracked 'untracked' contained
   syntax match uniteSource__ungite_status_Ignored 'ignored' contained
   syntax match uniteSource__ungite_status_Renamed '->'
+
   highlight default link uniteSource__ungite_status_Index diffAdded
   highlight default link uniteSource__ungite_status_Work diffRemoved
   highlight default link uniteSource__ungite_status_Untracked gitcommitUntrackedFile

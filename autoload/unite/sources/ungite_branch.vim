@@ -28,6 +28,14 @@ function! s:format(line)
         \ }
 endfunction
 
+function! s:source.hooks.on_syntax(args, context)
+  syntax match uniteSource__ungite_branch_CurrentIndicator '>'
+  syntax region uniteSource__ungite_branch_Name start='\%2c' end='$'
+
+  highlight default link uniteSource__ungite_branch_Name Keyword
+  highlight default link uniteSource__ungite_branch_CurrentIndicator Keyword
+endfunction
+
 function! s:git(cmd)
   return systemlist('git ' . a:cmd)
 endfunction
